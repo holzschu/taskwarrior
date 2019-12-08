@@ -32,7 +32,7 @@
 #define _WITH_GETLINE
 #endif
 #include <stdio.h>
-#include <iostream>
+// #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <vector>
@@ -55,6 +55,7 @@
 #include <utf8.h>
 #include <util.h>
 #include <main.h>
+#include "ios_error.h"
 
 #define STRING_UTIL_CONFIRM_YES      "yes"
 #define STRING_UTIL_CONFIRM_YES_U    "Yes"
@@ -71,7 +72,8 @@ static void signal_handler (int s)
 {
   if (s == SIGINT)
   {
-    std::cout << "\n\nInterrupted: No changes made.\n";
+    printf("\n\nInterrupted: No changes made.\n"); 
+    // std::cout << "\n\nInterrupted: No changes made.\n";
     exit (1);
   }
 }
@@ -95,21 +97,30 @@ int confirm4 (const std::string& question)
 
   do
   {
-    std::cout << question
-              << " ("
-              << options[1] << '/'
-              << options[2] << '/'
-              << options[4] << '/'
-              << options[5]
-              << ") ";
+    printf("%s (%s/%s/%s/%s) ", question.c_str(), options[1].c_str(), options[2].c_str(), options[4].c_str(), options[5].c_str()); 
+    fflush(thread_stdout); 
+    // std::cout << question
+    //           << " ("
+    //           << options[1] << '/'
+    //           << options[2] << '/'
+    //           << options[4] << '/'
+    //           << options[5]
+    //           << ") ";
 
     std::string answer {""};
-    std::getline (std::cin, answer);
+	char *c_answer = NULL;
+	size_t linecap = 0;
+	ssize_t linelen;
+	linelen = getline(&c_answer, &linecap, thread_stdin);
+    // std::getline (std::cin, answer);
+    answer = std::string(c_answer); 
     Context::getContext ().debug ("STDIN '" + answer + '\'');
-    answer = std::cin.eof () ? STRING_UTIL_CONFIRM_QUIT : Lexer::lowerCase (Lexer::trim (answer));
+    // answer = std::cin.eof () ? STRING_UTIL_CONFIRM_QUIT : Lexer::lowerCase (Lexer::trim (answer));
+    answer = (feof(thread_stdin) || (linelen <= 1)) ? STRING_UTIL_CONFIRM_QUIT : Lexer::lowerCase (Lexer::trim (answer, " \n"));
     autoComplete (answer, options, matches, 1); // Hard-coded 1.
   }
-  while (! std::cin.eof () && matches.size () != 1);
+  while (! feof(thread_stdin) && matches.size () != 1);
+  // while (! std::cin.eof () && matches.size () != 1);
 
   signal (SIGINT, SIG_DFL);
 

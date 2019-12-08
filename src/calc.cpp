@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmake.h>
-#include <iostream>
+// #include <iostream>
 #include <string>
 #include <stdlib.h>
 #include <string.h>
@@ -76,30 +76,32 @@ int main (int argc, char** argv)
     {
       if (!strcmp (argv[i], "-h") || ! strcmp (argv[i], "--help"))
       {
-        std::cout << '\n'
-                  << "Usage: " << argv[0] << " [options] '<expression>'\n"
-                  << '\n'
-                  << "Options:\n"
-                  << "  -h|--help         Display this usage\n"
-                  << "  -d|--debug        Debug mode\n"
-                  << "  -i|--infix        Infix expression (default)\n"
-                  << "  -p|--postfix      Postfix expression\n"
-                  << '\n';
+          printf("\nUsage: %s [options] '<expression>'\n\nOptions:\n   -h|--help         Display this usage\n  -d|--debug        Debug mode\n  -i|--infix        Infix expression (default)\n  -p|--postfix      Postfix expression\n\n", argv[0]); 
+        // std::cout << '\n'
+        //           << "Usage: " << argv[0] << " [options] '<expression>'\n"
+        //           << '\n'
+        //           << "Options:\n"
+        //           << "  -h|--help         Display this usage\n"
+        //           << "  -d|--debug        Debug mode\n"
+        //           << "  -i|--infix        Infix expression (default)\n"
+        //           << "  -p|--postfix      Postfix expression\n"
+        //           << '\n';
         exit (1);
       }
       else if (!strcmp (argv[i], "-v") || !strcmp (argv[i], "--version"))
       {
-        std::cout << '\n'
-                  << format ("calc {1} built for ", VERSION)
-                  << osName ()
-                  << '\n'
-                  << "Copyright (C) 2006 - 2019 P. Beckingham, F. Hernandez."
-                  << '\n'
-                  << '\n'
-                  << "Taskwarrior may be copied only under the terms of the MIT license, which may be found in the Taskwarrior source kit."
-                  << '\n'
-                  << '\n';
+          printf("\n%s%s\nCopyright (C) 2006 - 2019 P. Beckingham, F. Hernandez.\n\nTaskwarrior may be copied only under the terms of the MIT license, which may be found in the Taskwarrior source kit.\n\n", format ("calc {1} built for ", VERSION).c_str(),  osName ().c_str()); 
 
+        // std::cout << '\n'
+        //           << format ("calc {1} built for ", VERSION)
+        //           << osName ()
+        //           << '\n'
+        //           << "Copyright (C) 2006 - 2019 P. Beckingham, F. Hernandez."
+        //           << '\n'
+        //           << '\n'
+        //           << "Taskwarrior may be copied only under the terms of the MIT license, which may be found in the Taskwarrior source kit."
+        //           << '\n'
+        //           << '\n';
         exit (1);
       }
       else if (!strcmp (argv[i], "-d") || !strcmp (argv[i], "--debug"))
@@ -120,22 +122,26 @@ int main (int argc, char** argv)
 
     // Show any debug output.
     for (const auto& i : Context::getContext ().debugMessages)
-      std::cout << i << '\n';
+      	printf("%s\n", i.c_str()); 
+      // std::cout << i << '\n';
 
     // Show the result in string form.
-    std::cout << (std::string) result
-              << '\n';
+    printf("%s\n",  ((std::string) result).c_str()); 
+    // std::cout << (std::string) result
+       //       << '\n';
   }
 
   catch (const std::string& error)
   {
-    std::cerr << error << '\n';
+      fprintf(stderr, "%s\n", error.c_str()); 
+    // std::cerr << error << '\n';
     status = -1;
   }
 
   catch (...)
   {
-    std::cerr << "Unknown error occured.  Oops.\n";
+      fprintf(stderr, "Unknown error occured.  Oops.\n"); 
+    // std::cerr << "Unknown error occured.  Oops.\n";
     status = -2;
   }
 

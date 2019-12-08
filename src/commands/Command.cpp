@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmake.h>
-#include <iostream>
+// #include <iostream>
 #include <vector>
 #include <stdlib.h>
 #include <shared.h>
@@ -352,7 +352,8 @@ bool Command::permission (
     return true;
 
   if (Context::getContext ().verbose ("blank") && !_first_iteration)
-    std::cout << '\n';
+    printf("\n");
+    // std::cout << '\n';
   int answer = confirm4 (question);
   _first_iteration = false;
   switch (answer)

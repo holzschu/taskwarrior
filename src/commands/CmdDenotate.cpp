@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdDenotate.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <shared.h>
@@ -141,7 +141,8 @@ int CmdDenotate::execute (std::string&)
       }
       else
       {
-        std::cout << STRING_CMD_DENO_NO << '\n';
+        printf("%s\n", STRING_CMD_DENO_NO);
+        // std::cout << STRING_CMD_DENO_NO << '\n';
         rc = 1;
         if (_permission_quit)
           break;
@@ -149,7 +150,8 @@ int CmdDenotate::execute (std::string&)
     }
     else
     {
-      std::cout << format ("Did not find any matching annotation to be deleted for '{1}'.\n", pattern);
+      printf("%s", format ("Did not find any matching annotation to be deleted for '{1}'.\n", pattern).c_str());
+      // std::cout << format ("Did not find any matching annotation to be deleted for '{1}'.\n", pattern);
       rc = 1;
     }
   }

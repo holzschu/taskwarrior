@@ -27,11 +27,12 @@
 #include <cmake.h>
 #include <CmdImport.h>
 #include <CmdModify.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <format.h>
 #include <shared.h>
 #include <util.h>
+#include "ios_error.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 CmdImport::CmdImport ()
@@ -60,12 +61,19 @@ int CmdImport::execute (std::string&)
   if (! words.size () ||
       (words.size () == 1 && words[0] == "-"))
   {
-    std::cout << format ("Importing '{1}'\n", "STDIN");
+    printf("%s", format ("Importing '{1}'\n", "STDIN").c_str());
+    fflush(thread_stdout); 
+    // std::cout << format ("Importing '{1}'\n", "STDIN");
 
     std::string json;
     std::string line;
-    while (std::getline (std::cin, line))
-      json += line + '\n';
+    char* c_line = NULL;
+	size_t linecap = 0;
+    // while (std::getline (std::cin, line))
+	while (getline(&c_line, &linecap, thread_stdin) > 0) {
+		line = std::string(c_line); 
+		json += line + '\n';
+	}
 
     if (nontrivial (json))
       count = import (json);
@@ -79,7 +87,8 @@ int CmdImport::execute (std::string&)
       if (! incoming.exists ())
         throw format ("File '{1}' not found.", word);
 
-      std::cout << format ("Importing '{1}'\n", word);
+      printf("%s", format ("Importing '{1}'\n", word).c_str());
+      // std::cout << format ("Importing '{1}'\n", word);
 
       // Load the file.
       std::string json;
@@ -203,23 +212,28 @@ void CmdImport::importSingleTask (json::object* obj)
       CmdModify modHelper;
       modHelper.checkConsistency (before, task);
       modHelper.modifyAndUpdate (before, task);
-      std::cout << " mod  ";
+      printf("%s", " mod  ");
+      // std::cout << " mod  ";
     }
     else
     {
-      std::cout << " skip ";
+      printf("%s", " skip  ");
+      // std::cout << " skip ";
     }
   }
   else
   {
     Context::getContext ().tdb2.add (task);
-    std::cout << " add  ";
+    printf("%s", " add  ");
+    // std::cout << " add  ";
   }
 
-  std::cout << task.get ("uuid")
-            << ' '
-            << task.get ("description")
-            << '\n';
+  printf("%s %s\n", task.get ("uuid").c_str(), task.get ("description").c_str());
+  
+  // std::cout << task.get ("uuid")
+  //           << ' '
+  //           << task.get ("description")
+  //           << '\n';
 }
 
 ////////////////////////////////////////////////////////////////////////////////

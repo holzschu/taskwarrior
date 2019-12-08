@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <TDB2.h>
-#include <iostream>
+// #include <iostream>
 #include <sstream>
 #include <algorithm>
 #include <list>
@@ -61,7 +61,8 @@ TF2::TF2 ()
 TF2::~TF2 ()
 {
   if (_dirty && TDB2::debug_mode)
-    std::cout << format ("Exiting with unwritten changes to {1}\n", std::string (_file));
+    printf("%s", format ("Exiting with unwritten changes to {1}\n", std::string (_file)).c_str());
+    // std::cout << format ("Exiting with unwritten changes to {1}\n", std::string (_file));
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -857,7 +858,8 @@ void TDB2::revert ()
     File::write (backlog._file._data, b);
   }
   else
-    std::cout << "No changes made.\n";
+    printf("No changes made.\n");
+    // std::cout << "No changes made.\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -918,12 +920,14 @@ void TDB2::revert_pending (
       if (prior != "")
       {
         *task = prior;
-        std::cout << STRING_TDB2_REVERTED << '\n';
+        printf("%s\n", STRING_TDB2_REVERTED);
+        // std::cout << STRING_TDB2_REVERTED << '\n';
       }
       else
       {
         p.erase (task);
-        std::cout << "Task removed.\n";
+        printf("Task removed.\n");
+        // std::cout << "Task removed.\n";
       }
 
       break;
@@ -957,12 +961,14 @@ void TDB2::revert_completed (
         {
           c.erase (task);
           p.push_back (prior);
-          std::cout << STRING_TDB2_REVERTED << '\n';
+          printf("%s\n", STRING_TDB2_REVERTED);
+          // std::cout << STRING_TDB2_REVERTED << '\n';
           Context::getContext ().debug ("TDB::revert_completed - task belongs in pending.data");
         }
         else
         {
-          std::cout << STRING_TDB2_REVERTED << '\n';
+          printf("%s\n", STRING_TDB2_REVERTED);
+          // std::cout << STRING_TDB2_REVERTED << '\n';
           Context::getContext ().debug ("TDB::revert_completed - task belongs in completed.data");
         }
       }
@@ -970,11 +976,13 @@ void TDB2::revert_completed (
       {
         c.erase (task);
 
-        std::cout << STRING_TDB2_REVERTED << '\n';
+        printf("%s\n", STRING_TDB2_REVERTED);
+        // std::cout << STRING_TDB2_REVERTED << '\n';
         Context::getContext ().debug ("TDB::revert_completed - task removed");
       }
 
-      std::cout << "Undo complete.\n";
+      printf("Undo complete.\n");
+      // std::cout << "Undo complete.\n";
       break;
     }
   }
@@ -1034,9 +1042,10 @@ void TDB2::show_diff (
 
   if (Context::getContext ().config.get ("undo.style") == "side")
   {
-    std::cout << '\n'
-              << format ("The last modification was made {1}", lastChange.toString ())
-              << '\n';
+    printf("\n%s\n", format ("The last modification was made {1}", lastChange.toString ()).c_str()); 
+    // std::cout << '\n'
+    //           << format ("The last modification was made {1}", lastChange.toString ())
+    //           << '\n';
 
     // Attributes are all there is, so figure the different attribute names
     // between before and after.
@@ -1108,9 +1117,10 @@ void TDB2::show_diff (
       }
     }
 
-    std::cout << '\n'
-              << view.render ()
-              << '\n';
+    printf("\nview.render ().c_str()\n"); 
+    // std::cout << '\n'
+    //           << view.render ()
+    //           << '\n';
   }
 
   // This style looks like this:
@@ -1229,9 +1239,10 @@ void TDB2::show_diff (
       }
     }
 
-    std::cout << '\n'
-              << view.render ()
-              << '\n';
+    printf("\nview.render ().c_str()\n"); 
+    // std::cout << '\n'
+    //           << view.render ()
+    //           << '\n';
   }
 }
 

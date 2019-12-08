@@ -25,7 +25,7 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmake.h>
-#include <iostream>
+// #include <iostream>
 #include <algorithm>
 #include <sstream>
 #include <vector>
@@ -264,7 +264,8 @@ std::string renderAttribute (const std::string& name, const std::string& value, 
 void feedback_affected (const std::string& effect)
 {
   if (Context::getContext ().verbose ("affected"))
-    std::cout << effect << "\n";
+      printf("%s\n", effect.c_str()); 
+    // std::cout << effect << "\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -276,8 +277,9 @@ void feedback_affected (const std::string& effect)
 void feedback_affected (const std::string& effect, int quantity)
 {
   if (Context::getContext ().verbose ("affected"))
-    std::cout << format (effect, quantity)
-              << "\n";
+      printf("%s\n", format(effect, quantity).c_str()); 
+    // std::cout << format (effect, quantity)
+      //        << "\n";
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -291,10 +293,13 @@ void feedback_affected (const std::string& effect, const Task& task)
 {
   if (Context::getContext ().verbose ("affected"))
   {
-    std::cout << format (effect,
+      printf("%s\n", format (effect,
                          task.identifier (true),
-                         task.get ("description"))
-              << "\n";
+                         task.get ("description")).c_str()); 
+    // std::cout << format (effect,
+    //                      task.identifier (true),
+    //                      task.get ("description"))
+    //           << "\n";
   }
 }
 
@@ -355,8 +360,9 @@ void feedback_special_tags (const Task& task, const std::string& tag)
 
     if (msg.length ())
     {
-      std::cout << format (msg, task.identifier ())
-                << "\n";
+      	printf("%s\n", format (msg, task.identifier ()).c_str()); 
+      // std::cout << format (msg, task.identifier ())
+      //          << "\n";
     }
   }
 }
@@ -382,17 +388,23 @@ void feedback_unblocked (const Task& task)
       if (blocking.size () == 0)
       {
         if (i.id)
-          std::cout << format ("Unblocked {1} '{2}'.",
+          	printf("%s\n", format ("Unblocked {1} '{2}'.",
                                i.id,
-                               i.get ("description"))
-                    << "\n";
+                               i.get ("description")).c_str()); 
+          // std::cout << format ("Unblocked {1} '{2}'.",
+          //                      i.id,
+          //                      i.get ("description"))
+          //           << "\n";
         else
         {
           std::string uuid = i.get ("uuid");
-          std::cout << format ("Unblocked {1} '{2}'.",
+          printf("%s\n", format ("Unblocked {1} '{2}'.",
                                i.get ("uuid"),
-                               i.get ("description"))
-                    << "\n";
+                               i.get ("description")).c_str()); 
+          // std::cout << format ("Unblocked {1} '{2}'.",
+          //                      i.get ("uuid"),
+          //                      i.get ("description"))
+          //           << "\n";
         }
       }
     }

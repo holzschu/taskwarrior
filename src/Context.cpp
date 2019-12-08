@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <Context.h>
-#include <iostream>
+// #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <iomanip>
@@ -49,11 +49,12 @@
 #endif
 
 #include <stdio.h>
-#include <sys/ioctl.h>
+// #include <sys/ioctl.h>
 
 #ifdef SOLARIS
 #include <sys/termios.h>
 #endif
+#include "ios_error.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 // This string is parsed and used as default values for configuration.
@@ -70,10 +71,10 @@ std::string configurationDefaults =
   "# Use the command 'task show' to see all defaults and overrides\n"
   "\n"
   "# Files\n"
-  "data.location=~/.task\n"
+  "data.location=~/Documents/.task\n"
   "locking=1                                      # Use file-level locking\n"
   "gc=1                                           # Garbage-collect data files - DO NOT CHANGE unless you are sure\n"
-  "exit.on.missing.db=0                           # Whether to exit if ~/.task is not found\n"
+  "exit.on.missing.db=0                           # Whether to exit if ~/Documents/.task is not found\n"
   "hooks=1                                        # Master control switch for hooks\n"
   "\n"
   "# Terminal\n"
@@ -446,7 +447,7 @@ int Context::initialize (int argc, const char** argv)
     ////////////////////////////////////////////////////////////////////////////
     //
     // [1] Load the correct config file.
-    //     - Default to ~/.taskrc (ctor).
+    //     - Default to ~/Documents/.taskrc (ctor).
     //     - Allow $TASKRC override.
     //     - Allow command line override rc:<file>
     //     - Load resultant file.
@@ -481,7 +482,7 @@ int Context::initialize (int argc, const char** argv)
     ////////////////////////////////////////////////////////////////////////////
     //
     // [2] Locate the data directory.
-    //     - Default to ~/.task (ctor).
+    //     - Default to ~/Documents/.task (ctor).
     //     - Allow $TASKDATA override.
     //     - Allow command line override rc.data.location:<dir>
     //     - Inform TDB2 where to find data.
@@ -624,9 +625,11 @@ int Context::initialize (int argc, const char** argv)
     {
       for (auto& d : debugMessages)
         if (color ())
-          std::cerr << colorizeDebug (d) << '\n';
+          fprintf(stderr, "%s\n", colorizeDebug (d).c_str()); 
+          // std::cerr << colorizeDebug (d) << '\n';
         else
-          std::cerr << d << '\n';
+          fprintf(stderr, "%s\n", d.c_str()); 
+          // std::cerr << d << '\n';
     }
 
     // Dump all headers, controlled by 'header' verbosity token.
@@ -634,9 +637,11 @@ int Context::initialize (int argc, const char** argv)
     {
       for (auto& h : headers)
         if (color ())
-          std::cerr << colorizeHeader (h) << '\n';
+          fprintf(stderr, "%s\n", colorizeHeader (h).c_str()); 
+          // std::cerr << colorizeHeader (h) << '\n';
         else
-          std::cerr << h << '\n';
+          fprintf(stderr, "%s\n", h.c_str()); 
+          // std::cerr << h << '\n';
     }
 
     // Dump all footnotes, controlled by 'footnote' verbosity token.
@@ -644,18 +649,22 @@ int Context::initialize (int argc, const char** argv)
     {
       for (auto& f : footnotes)
         if (color ())
-          std::cerr << colorizeFootnote (f) << '\n';
+          fprintf(stderr, "%s\n", colorizeFootnote (f).c_str()); 
+          // std::cerr << colorizeFootnote (f) << '\n';
         else
-          std::cerr << f << '\n';
+          fprintf(stderr, "%s\n", f.c_str()); 
+          // std::cerr << f << '\n';
     }
 
     // Dump all errors, non-maskable.
     // Colorized as footnotes.
     for (auto& e : errors)
       if (color ())
-        std::cerr << colorizeFootnote (e) << '\n';
+          fprintf(stderr, "%s\n", colorizeFootnote (e).c_str()); 
+        // std::cerr << colorizeFootnote (e) << '\n';
       else
-        std::cerr << e << '\n';
+          fprintf(stderr, "%s\n", e.c_str()); 
+        // std::cerr << e << '\n';
   }
 
   time_init_us += timer_total.total_us ();
@@ -734,9 +743,11 @@ int Context::run ()
   {
     for (auto& d : debugMessages)
       if (color ())
-        std::cerr << colorizeDebug (d) << '\n';
+          fprintf(stderr, "%s\n", colorizeDebug (d).c_str()); 
+        // std::cerr << colorizeDebug (d) << '\n';
       else
-        std::cerr << d << '\n';
+		  fprintf(stderr, "%s\n", d.c_str()); 
+        // std::cerr << d << '\n';
   }
 
   // Dump all headers, controlled by 'header' verbosity token.
@@ -744,31 +755,38 @@ int Context::run ()
   {
     for (auto& h : headers)
       if (color ())
-        std::cerr << colorizeHeader (h) << '\n';
+          fprintf(stderr, "%s\n", colorizeHeader (h).c_str()); 
+        // std::cerr << colorizeHeader (h) << '\n';
       else
-        std::cerr << h << '\n';
+		  fprintf(stderr, "%s\n", h.c_str()); 
+        // std::cerr << h << '\n';
   }
 
   // Dump the report output.
-  std::cout << output;
+  printf("%s\n", output.c_str()); 
+  // std::cout << output;
 
   // Dump all footnotes, controlled by 'footnote' verbosity token.
   if (verbose ("footnote"))
   {
     for (auto& f : footnotes)
       if (color ())
-        std::cerr << colorizeFootnote (f) << '\n';
+		  fprintf(stderr, "%s\n", colorizeFootnote (f).c_str()); 
+        // std::cerr << colorizeFootnote (f) << '\n';
       else
-        std::cerr << f << '\n';
+		  fprintf(stderr, "%s\n", f.c_str()); 
+        // std::cerr << f << '\n';
   }
 
   // Dump all errors, non-maskable.
   // Colorized as footnotes.
   for (auto& e : errors)
     if (color ())
-      std::cerr << colorizeError (e) << '\n';
+		fprintf(stderr, "%s\n", colorizeError (e).c_str()); 
+      // std::cerr << colorizeError (e) << '\n';
     else
-      std::cerr << e << '\n';
+		fprintf(stderr, "%s\n", e.c_str()); 
+      // std::cerr << e << '\n';
 
   return rc;
 }
@@ -843,12 +861,14 @@ int Context::getWidth ()
     if (terminal_width == 0 &&
         terminal_height == 0)
     {
+      /* 
       unsigned short buff[4];
       if (ioctl (STDOUT_FILENO, TIOCGWINSZ, &buff) != -1)
       {
         terminal_height = buff[0];
         terminal_width = buff[1];
-      }
+      } */
+      terminal_width = atoi(ios_getenv("COLUMNS"));
     }
 
     width = terminal_width;
@@ -878,12 +898,15 @@ int Context::getHeight ()
     if (terminal_width == 0 &&
         terminal_height == 0)
     {
+    	/*
       unsigned short buff[4];
       if (ioctl (STDOUT_FILENO, TIOCGWINSZ, &buff) != -1)
       {
         terminal_height = buff[0];
         terminal_width = buff[1];
       }
+      */
+      terminal_height = atoi(ios_getenv("LINES"));
     }
 
     height = terminal_height;
@@ -1113,7 +1136,7 @@ void Context::createDefaultConfig ()
       throw std::string ("Cannot proceed without rc file.");
 
     // Override data.location in the defaults.
-    auto loc = configurationDefaults.find ("data.location=~/.task");
+    auto loc = configurationDefaults.find ("data.location=~/Documents/.task");
     //                                 loc+0^          +14^   +21^
 
     Datetime now;
@@ -1231,7 +1254,8 @@ void Context::updateXtermTitle ()
       title += a->attribute ("raw");
     }
 
-    std::cout << "]0;task " << command << ' ' << title << "";
+    printf("]0;task %s %s^G", command.c_str(), title.c_str());
+    // std::cout << "]0;task " << command << ' ' << title << "";
   }
 }
 

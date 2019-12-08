@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdEdit.h>
-#include <iostream>
+// #include <iostream>
 #include <sstream>
 #include <cstdlib>
 #include <cstring>
@@ -50,6 +50,9 @@
 #define STRING_EDIT_DUE_MOD          "Due date modified."
 #define STRING_EDIT_UNTIL_MOD        "Until date modified."
 #define STRING_EDIT_WAIT_MOD         "Wait date modified."
+
+// iOS changes: 
+#include <ios_error.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 CmdEdit::CmdEdit ()
@@ -778,16 +781,20 @@ ARE_THESE_REALLY_HARMFUL:
   bool changes = false; // No changes made.
 
   // Launch the editor.
-  std::cout << format ("Launching '{1}' now...\n", editor);
+  printf("%s", format ("Launching '{1}' now...\n", editor).c_str());
+  // std::cout << format ("Launching '{1}' now...\n", editor);
   int exitcode = system (editor.c_str ());
   auto captured_errno = errno;
   if (0 == exitcode)
-    std::cout << "Editing complete.\n";
+    printf("Editing complete.\n");
+    // std::cout << "Editing complete.\n";
   else
   {
-    std::cout << format ("Editing failed with exit code {1}.\n", exitcode);
+    printf("%s", format ("Editing failed with exit code {1}.\n", exitcode).c_str());
+    // std::cout << format ("Editing failed with exit code {1}.\n", exitcode);
     if (-1 == exitcode)
-      std::cout << std::strerror (captured_errno) << '\n';
+      printf("%s\n", std::strerror (captured_errno));
+      // std::cout << std::strerror (captured_errno) << '\n';
     File::remove (file.str ());
     return CmdEdit::editResult::error;
   }
@@ -800,7 +807,8 @@ ARE_THESE_REALLY_HARMFUL:
   // if changes were made.
   if (before_orig != after)
   {
-    std::cout << "Edits were detected.\n";
+    printf("Edits were detected.\n");
+    // std::cout << "Edits were detected.\n";
     std::string problem = "";
     auto oops = false;
 
@@ -817,7 +825,8 @@ ARE_THESE_REALLY_HARMFUL:
 
     if (oops)
     {
-      std::cerr << "Error: " << problem << '\n';
+      fprintf(stderr, "Error: %s\n", problem.c_str());
+      // std::cerr << "Error: " << problem << '\n';
 
       // Preserve the edits.
       before = after;
@@ -831,7 +840,8 @@ ARE_THESE_REALLY_HARMFUL:
   }
   else
   {
-    std::cout << "No edits were detected.\n";
+    printf("No edits were detected.\n");
+    // std::cout << "No edits were detected.\n";
     changes = false;
   }
 

@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdAnnotate.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <main.h>
@@ -115,7 +115,8 @@ int CmdAnnotate::execute (std::string&)
     }
     else
     {
-      std::cout << "Task not annotated.\n";
+      printf("Task not annotated.\n"); 
+      // std::cout << "Task not annotated.\n";
       rc = 1;
       if (_permission_quit)
         break;

@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <algorithm>
-#include <iostream>
+// #include <iostream>
 #include <sstream>
 #include <stack>
 #include <Context.h>
@@ -160,11 +160,13 @@ void dependencyChainOnComplete (Task& task)
     // Nag about broken chain.
     if (Context::getContext ().config.getBoolean ("dependency.reminder"))
     {
-      std::cout << format (STRING_DEPEND_BLOCKED, task.identifier ())
-                << '\n';
+      	printf("%s\n",  format (STRING_DEPEND_BLOCKED, task.identifier ()).c_str()); 
+      // std::cout << format (STRING_DEPEND_BLOCKED, task.identifier ())
+         //       << '\n';
 
       for (const auto& b : blocking)
-        std::cout << "  " << b.id << ' ' << b.get ("description") << '\n';
+          printf("  %d %s\n", b.id, b.get ("description").c_str()); 
+        // std::cout << "  " << b.id << ' ' << b.get ("description") << '\n';
     }
 
     // If there are both blocking and blocked tasks, the chain is broken.
@@ -172,10 +174,12 @@ void dependencyChainOnComplete (Task& task)
     {
       if (Context::getContext ().config.getBoolean ("dependency.reminder"))
       {
-        std::cout << "and is blocking:\n";
+          printf("and is blocking:\n");
+        // std::cout << "and is blocking:\n";
 
         for (const auto& b : blocked)
-          std::cout << "  " << b.id << ' ' << b.get ("description") << '\n';
+          printf("  %d %s\n", b.id, b.get ("description").c_str()); 
+          // std::cout << "  " << b.id << ' ' << b.get ("description") << '\n';
       }
 
       if (!Context::getContext ().config.getBoolean ("dependency.confirmation") ||
@@ -213,11 +217,13 @@ void dependencyChainOnStart (Task& task)
     // broken chain.
     if (blocking.size ())
     {
-      std::cout << format (STRING_DEPEND_BLOCKED, task.identifier ())
-                << '\n';
+      printf("%s\n",  format (STRING_DEPEND_BLOCKED, task.identifier ()).c_str()); 
+      // std::cout << format (STRING_DEPEND_BLOCKED, task.identifier ())
+         //       << '\n';
 
       for (const auto& b : blocking)
-        std::cout << "  " << b.id << ' ' << b.get ("description") << '\n';
+          printf("  %d %s\n", b.id, b.get ("description").c_str()); 
+        // std::cout << "  " << b.id << ' ' << b.get ("description") << '\n';
     }
   }
 }

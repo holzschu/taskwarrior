@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdDone.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <util.h>
@@ -109,7 +109,8 @@ int CmdDone::execute (std::string&)
       }
       else
       {
-        std::cout << "Task not completed.\n";
+        printf("Task not completed.\n");
+        // std::cout << "Task not completed.\n";
         rc = 1;
         if (_permission_quit)
           break;
@@ -117,10 +118,14 @@ int CmdDone::execute (std::string&)
     }
     else
     {
-      std::cout << format ("Task {1} '{2}' is neither pending nor waiting.",
+      printf("%s\n", format ("Task {1} '{2}' is neither pending nor waiting.",
                            task.identifier (true),
-                           task.get ("description"))
-                << '\n';
+                           task.get ("description")).c_str());
+      	
+      // std::cout << format ("Task {1} '{2}' is neither pending nor waiting.",
+      //                      task.identifier (true),
+      //                      task.get ("description"))
+      //           << '\n';
       rc = 1;
     }
   }

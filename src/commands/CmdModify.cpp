@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdModify.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <main.h>
@@ -91,7 +91,8 @@ int CmdModify::execute (std::string&)
       }
       else
       {
-        std::cout << "Task not modified.\n";
+        printf("Task not modified.\n");
+        // std::cout << "Task not modified.\n";
         rc = 1;
         if (_permission_quit)
           break;

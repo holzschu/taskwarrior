@@ -25,10 +25,12 @@
 ////////////////////////////////////////////////////////////////////////////////
 
 #include <cmake.h>
-#include <iostream>
+// #include <iostream>
 #include <new>
 #include <cstring>
 #include <Context.h>
+#include <stdio.h>
+#include "ios_error.h"
 
 ////////////////////////////////////////////////////////////////////////////////
 int main (int argc, const char** argv)
@@ -41,7 +43,8 @@ int main (int argc, const char** argv)
   // Lightweight version checking that doesn't require initialization or any I/O.
   if (argc == 2 && !strcmp (argv[1], "--version"))
   {
-    std::cout << VERSION << "\n";
+  	  printf("%s\n", VERSION); 
+    // std::cout << VERSION << "\n";
   }
   else
   {
@@ -54,19 +57,22 @@ int main (int argc, const char** argv)
 
     catch (const std::string& error)
     {
-      std::cerr << error << "\n";
+  	  fprintf(stderr, "%s\n", error.c_str()); 
+      // std::cerr << error << "\n";
       status = -1;
     }
 
     catch (std::bad_alloc& error)
     {
-      std::cerr << "Error: Memory allocation failed: " << error.what () << "\n";
+  	  fprintf(stderr, "Error: Memory allocation failed: %s\n", error.what()); 
+      // std::cerr << "Error: Memory allocation failed: " << error.what () << "\n";
       status = -3;
     }
 
     catch (...)
     {
-      std::cerr << "Unknown error. Please report.\n";
+      fprintf(stderr, "Unknown error. Please report.\n");
+      // std::cerr << "Unknown error. Please report.\n";
       status = -2;
     }
   }

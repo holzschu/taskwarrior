@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdPrepend.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <shared.h>
@@ -115,7 +115,8 @@ int CmdPrepend::execute (std::string&)
     }
     else
     {
-      std::cout << "Task not prepended.\n";
+      printf("Task not prepended.\n");
+      // std::cout << "Task not prepended.\n";
       rc = 1;
       if (_permission_quit)
         break;

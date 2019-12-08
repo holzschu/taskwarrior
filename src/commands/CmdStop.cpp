@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdStop.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <main.h>
@@ -96,7 +96,8 @@ int CmdStop::execute (std::string&)
       }
       else
       {
-        std::cout << "Task not stopped.\n";
+        printf("Task not stopped.\n");
+        // std::cout << "Task not stopped.\n";
         rc = 1;
         if (_permission_quit)
           break;
@@ -104,10 +105,13 @@ int CmdStop::execute (std::string&)
     }
     else
     {
-      std::cout << format ("Task {1} '{2}' not started.",
+      	printf("%s\n", format ("Task {1} '{2}' not started.",
                            task.identifier (true),
-                           task.get ("description"))
-                << '\n';
+                           task.get ("description")).c_str());
+      // std::cout << format ("Task {1} '{2}' not started.",
+      //                      task.identifier (true),
+      //                      task.get ("description"))
+      //           << '\n';
       rc = 1;
     }
   }

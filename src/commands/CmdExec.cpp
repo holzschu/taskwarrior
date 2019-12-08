@@ -30,6 +30,9 @@
 #include <Context.h>
 #include <shared.h>
 
+// iOS changes: 
+#include <ios_error.h>
+
 ////////////////////////////////////////////////////////////////////////////////
 CmdExec::CmdExec ()
 {

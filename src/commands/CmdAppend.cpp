@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdAppend.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <shared.h>
@@ -115,7 +115,8 @@ int CmdAppend::execute (std::string&)
     }
     else
     {
-      std::cout << "Task not appended.\n";
+      printf("Task not appended.\n"); 
+      // std::cout << "Task not appended.\n";
       rc = 1;
       if (_permission_quit)
         break;

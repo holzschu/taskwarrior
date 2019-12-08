@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdDuplicate.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <format.h>
@@ -85,16 +85,18 @@ int CmdDuplicate::execute (std::string&)
       dup.remove ("recur");
       dup.remove ("until");
       dup.remove ("imask");
-      std::cout << format ("Note: task {1} was a recurring task.  The duplicated task is not.", task.identifier ())
-          << '\n';
+      printf("%s\n", format ("Note: task {1} was a recurring task.  The duplicated task is not.", task.identifier ()).c_str()); 
+      // std::cout << format ("Note: task {1} was a recurring task.  The duplicated task is not.", task.identifier ())
+      //    << '\n';
     }
 
     // When duplicating a parent task, create a new parent task.
     else if (dup.getStatus () == Task::recurring)
     {
       dup.remove ("mask");
-      std::cout << format ("Note: task {1} was a parent recurring task.  The duplicated task is too.", task.identifier ())
-          << '\n';
+      printf("%s\n", format ("Note: task {1} was a parent recurring task.  The duplicated task is too.", task.identifier ()).c_str()); 
+      // std::cout << format ("Note: task {1} was a parent recurring task.  The duplicated task is too.", task.identifier ())
+      //    << '\n';
     }
 
     dup.setStatus (Task::pending); // Does not inherit status.
@@ -115,18 +117,21 @@ int CmdDuplicate::execute (std::string&)
       if (Context::getContext ().verbose ("new-id") &&
           (status == Task::pending ||
            status == Task::waiting))
-        std::cout << format ("Created task {1}.\n", dup.id);
+        printf("%s", format ("Created task {1}.\n", dup.id).c_str());
+        // std::cout << format ("Created task {1}.\n", dup.id);
 
       else if (Context::getContext ().verbose ("new-uuid") &&
                status != Task::recurring)
-        std::cout << format ("Created task {1}.\n", dup.get ("uuid"));
+        printf("%s", format ("Created task {1}.\n", dup.get ("uuid")).c_str());
+        // std::cout << format ("Created task {1}.\n", dup.get ("uuid"));
 
       if (Context::getContext ().verbose ("project"))
         projectChanges[task.get ("project")] = onProjectChange (task);
     }
     else
     {
-      std::cout << "Task not duplicated.\n";
+      printf("Task not duplicated.\n");
+      // std::cout << "Task not duplicated.\n";
       rc = 1;
       if (_permission_quit)
         break;

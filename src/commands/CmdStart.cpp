@@ -26,7 +26,7 @@
 
 #include <cmake.h>
 #include <CmdStart.h>
-#include <iostream>
+// #include <iostream>
 #include <Context.h>
 #include <Filter.h>
 #include <main.h>
@@ -106,7 +106,8 @@ int CmdStart::execute (std::string&)
       }
       else
       {
-        std::cout << "Task not started.\n";
+        printf("Task not started.\n");
+        // std::cout << "Task not started.\n";
         rc = 1;
         if (_permission_quit)
           break;
@@ -114,10 +115,14 @@ int CmdStart::execute (std::string&)
     }
     else
     {
-      std::cout << format ("Task {1} '{2}' already started.",
+      printf("%s\n", format ("Task {1} '{2}' already started.",
                            task.id,
-                           task.get ("description"))
-                << '\n';
+                           task.get ("description")).c_str()); 
+      	
+      // std::cout << format ("Task {1} '{2}' already started.",
+      //                      task.id,
+      //                      task.get ("description"))
+      //           << '\n';
       rc = 1;
     }
   }
