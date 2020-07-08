@@ -2,6 +2,15 @@
 
 # Do NOT use cmake! It has problems with cross-compiling. 
 # compile for iOS:
+
+IOS_SYSTEM_VER="2.6"
+
+HHROOT="https://github.com/holzschu"
+
+echo "Downloading header file:"
+curl -OL $HHROOT/ios_system/releases/download/$IOS_SYSTEM_VER/ios_error.h 
+
+echo "Compiling for iOS:"
 cp iOS_flags/CMakeCache.txt .
 make clean
 make
@@ -22,6 +31,7 @@ do
 done
 
 # compile for simulator:
+echo "Compiling for Simulator:"
 make clean
 cp Simulator_flags/CMakeCache.txt .
 make
@@ -40,6 +50,7 @@ do
 done
 
 # then, merge them into XCframeworks:
+echo "Merging into XCFrameworks:"
 for framework in task lex calc
 do
    rm -rf $framework.xcframework
