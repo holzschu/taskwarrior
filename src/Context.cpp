@@ -924,7 +924,7 @@ bool Context::color ()
     use_color = config.getBoolean ("color");
 
     // Only tty's support color.
-    if (! isatty (STDOUT_FILENO))
+    if (! ios_isatty (STDOUT_FILENO))
     {
       // No ioctl.
       config.set ("detection", "off");
@@ -1241,7 +1241,7 @@ void Context::debugTiming (const std::string& details, const Timer& timer)
 // this output?'.
 void Context::updateXtermTitle ()
 {
-  if (config.getBoolean ("xterm.title") && isatty (STDOUT_FILENO))
+  if (config.getBoolean ("xterm.title") && ios_isatty (STDOUT_FILENO))
   {
     auto command = cli2.getCommand ();
     std::string title;
