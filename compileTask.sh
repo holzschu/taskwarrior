@@ -10,6 +10,12 @@ HHROOT="https://github.com/holzschu"
 echo "Downloading header file:"
 curl -OL $HHROOT/ios_system/releases/download/$IOS_SYSTEM_VER/ios_error.h 
 
+echo "Downloading ios_system Framework:"
+rm -rf ios_system.xcframework
+curl -OL $HHROOT/ios_system/releases/download/$IOS_SYSTEM_VER/ios_system.xcframework.zip
+unzip ios_system.xcframework.zip
+rm ios_system.xcframework.zip
+
 echo "Compiling for iOS:"
 cp iOS_flags/CMakeCache.txt .
 make clean
@@ -46,6 +52,10 @@ do
 	plutil -replace CFBundleExecutable -string $binary Frameworks_Simulator/$binary.framework/Info.plist
 	plutil -replace CFBundleName -string $binary Frameworks_Simulator/$binary.framework/Info.plist
 	plutil -replace CFBundleIdentifier -string Nicolas-Holzschuch.$binary  Frameworks_Simulator/$binary.framework/Info.plist
+	# Also change iphoneos to iphonesimulator 
+	plutil -replace DTPlatformName -string iphonesimulator  Frameworks_Simulator/$binary.framework/Info.plist
+	plutil -replace CFBundleSupportedPlatforms -string iPhoneSimulator  Frameworks_Simulator/$binary.framework/Info.plist
+	plutil -replace DTSDKName -string iphonesimulator11.0 Frameworks_Simulator/$binary.framework/Info.plist
 	install_name_tool -id @rpath/$binary.framework/$binary   Frameworks_Simulator/$binary.framework/$binary
 done
 
