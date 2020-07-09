@@ -48,14 +48,10 @@ do
 	rm -rf Frameworks_Simulator/$binary.framework
 	mkdir Frameworks_Simulator/$binary.framework
 	cp src/$binary Frameworks_Simulator/$binary.framework/$binary
-	cp basic_Info.plist Frameworks_Simulator/$binary.framework/Info.plist
+	cp basic_Info_Simulator.plist Frameworks_Simulator/$binary.framework/Info.plist
 	plutil -replace CFBundleExecutable -string $binary Frameworks_Simulator/$binary.framework/Info.plist
 	plutil -replace CFBundleName -string $binary Frameworks_Simulator/$binary.framework/Info.plist
 	plutil -replace CFBundleIdentifier -string Nicolas-Holzschuch.$binary  Frameworks_Simulator/$binary.framework/Info.plist
-	# Also change iphoneos to iphonesimulator 
-	plutil -replace DTPlatformName -string iphonesimulator  Frameworks_Simulator/$binary.framework/Info.plist
-	plutil -replace CFBundleSupportedPlatforms -string iPhoneSimulator  Frameworks_Simulator/$binary.framework/Info.plist
-	plutil -replace DTSDKName -string iphonesimulator11.0 Frameworks_Simulator/$binary.framework/Info.plist
 	install_name_tool -id @rpath/$binary.framework/$binary   Frameworks_Simulator/$binary.framework/$binary
 done
 
