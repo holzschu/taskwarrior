@@ -36,6 +36,7 @@
 #include <Duration.h>
 #include <shared.h>
 #include <format.h>
+#include <ios_error.h>
 
 ////////////////////////////////////////////////////////////////////////////////
 // Constants.
@@ -86,7 +87,7 @@ int main (int argc, char** argv)
         //           << "  -i|--infix        Infix expression (default)\n"
         //           << "  -p|--postfix      Postfix expression\n"
         //           << '\n';
-        exit (1);
+        ios_exit (1);
       }
       else if (!strcmp (argv[i], "-v") || !strcmp (argv[i], "--version"))
       {
@@ -102,7 +103,7 @@ int main (int argc, char** argv)
         //           << "Taskwarrior may be copied only under the terms of the MIT license, which may be found in the Taskwarrior source kit."
         //           << '\n'
         //           << '\n';
-        exit (1);
+        ios_exit (1);
       }
       else if (!strcmp (argv[i], "-d") || !strcmp (argv[i], "--debug"))
         e.debug (true);

@@ -74,7 +74,7 @@ static void signal_handler (int s)
   {
     printf("\n\nInterrupted: No changes made.\n"); 
     // std::cout << "\n\nInterrupted: No changes made.\n";
-    exit (1);
+    ios_exit (1);
   }
 }
 
