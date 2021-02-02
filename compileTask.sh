@@ -3,7 +3,7 @@
 # Do NOT use cmake! It has problems with cross-compiling. 
 # compile for iOS:
 
-IOS_SYSTEM_VER="2.6"
+IOS_SYSTEM_VER="v2.7.0"
 
 HHROOT="https://github.com/holzschu"
 

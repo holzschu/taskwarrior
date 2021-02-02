@@ -13,17 +13,17 @@ let package = Package(
         .binaryTarget(
             name: "task",
             url: "https://github.com/holzschu/taskwarrior/releases/download/1.0/task.xcframework.zip",
-            checksum: "f0735ab4f8fc9097a698ef4ce5bc21b576ce1d48cbf90065c0282c116822c3a0"
+            checksum: "3fcc3b3fdd9e9247f9b08c1140343e790d38070e02a0a79edff43eb148abf043"
         ),
         .binaryTarget(
             name: "lex",
             url: "https://github.com/holzschu/taskwarrior/releases/download/1.0/lex.xcframework.zip",
-            checksum: "da54b849f899f4aaefe68ef75235e1889d008c5bc681d589c1ef3cf41b81e48a"
+            checksum: "d4a8e9d7519e4120ea12c18b50f652f3c8188d21c6cc066adf716869c159ad8b"
         ),
         .binaryTarget(
             name: "calc",
             url: "https://github.com/holzschu/taskwarrior/releases/download/1.0/calc.xcframework.zip",
-            checksum: "b7cce32af48f581d0c13d43d7c2e9e1b48fd0bd8a2efd0198f0f091a5c441b99"
+            checksum: "1fba531bbea928b983e3d72d786bf6ca0a6ca5de043357738a3fb0a4ce1233e9"
         )
     ]
 )
