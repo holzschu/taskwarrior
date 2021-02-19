@@ -18,7 +18,7 @@
 CC:UNINITIALIZED=clang
 
 //No help, variable specified on the command line.
-CFLAGS:UNINITIALIZED=-miphoneos-version-min=11.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
+CFLAGS:UNINITIALIZED=-miphonesimulator-version-min=14.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=CMAKE_ADDR2LINE-NOTFOUND
@@ -37,7 +37,7 @@ CMAKE_COLOR_MAKEFILE:BOOL=ON
 CMAKE_CXX_COMPILER:FILEPATH=/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/c++
 
 //Flags used by the compiler during all build types.
-CMAKE_CXX_FLAGS:STRING=-miphoneos-version-min=11.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/ -F /Users/holzschu/src/Xcode_iPad/taskwarrior/ios_system.xcframework/ios-arm64_x86_64-simulator -framework ios_system -shared
+CMAKE_CXX_FLAGS:STRING=-miphonesimulator-version-min=14.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/ -F /Users/holzschu/src/Xcode_iPad/taskwarrior/ios_system.xcframework/ios-arm64_x86_64-simulator -framework ios_system -shared
 
 //Flags used by the compiler during debug builds.
 CMAKE_CXX_FLAGS_DEBUG:STRING=-g
@@ -75,7 +75,7 @@ CMAKE_C_FLAGS_RELWITHDEBINFO:STRING=-O2 -g -DNDEBUG
 CMAKE_DLLTOOL:FILEPATH=CMAKE_DLLTOOL-NOTFOUND
 
 //Flags used by the linker.
-CMAKE_EXE_LINKER_FLAGS:STRING=-miphoneos-version-min=11.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/ -F .. -framework ios_system -shared
+CMAKE_EXE_LINKER_FLAGS:STRING=-miphonesimulator-version-min=14.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/ -F .. -framework ios_system -shared
 
 //Flags used by the linker during debug builds.
 CMAKE_EXE_LINKER_FLAGS_DEBUG:STRING=
@@ -246,7 +246,7 @@ CPACK_BINARY_TXZ:BOOL=OFF
 CXX:UNINITIALIZED=clang++
 
 //No help, variable specified on the command line.
-CXXFLAGS:UNINITIALIZED=-miphoneos-version-min=11.0  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
+CXXFLAGS:UNINITIALIZED=-miphonesimulator-version-min=14.0  -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
 
 //Enable 'task sync' support
 ENABLE_SYNC:BOOL=OFF
@@ -255,7 +255,7 @@ ENABLE_SYNC:BOOL=OFF
 ENABLE_WASM:BOOL=OFF
 
 //No help, variable specified on the command line.
-LDSHARED:UNINITIALIZED=clang -v -undefined error -dynamiclib -miphoneos-version-min=11.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
+LDSHARED:UNINITIALIZED=clang -v -undefined error -dynamiclib -miphonesimulator-version-min=44.0 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator.sdk/
 
 //Installation directory for the binary
 TASK_BINDIR:STRING=bin
