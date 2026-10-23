@@ -13,7 +13,7 @@ endif (_HAS_CXX14)
 
 if (${CMAKE_SYSTEM_NAME} MATCHES "Linux")
   set (LINUX true)
-elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+elseif (${CMAKE_SYSTEM_NAME} MATCHES "Darwin|iOS")
   set (DARWIN true)
   set (_CXX14_FLAGS "${_CXX14_FLAGS} -stdlib=libc++")
 elseif (${CMAKE_SYSTEM_NAME} MATCHES "kFreeBSD")
