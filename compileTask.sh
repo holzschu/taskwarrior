@@ -1,68 +1,56 @@
-#!/bin/sh
+#!/bin/bash
+set -euo pipefail
 
-# Do NOT use cmake! It has problems with cross-compiling. 
-# compile for iOS:
+mkdir -p .build/deps
+curl --fail --location --retry 3 https://github.com/holzschu/ios_system/releases/download/v3.0.5/ios_error.h -o .build/deps/ios_error.h
+curl --fail --location --retry 3 https://github.com/holzschu/ios_system/releases/download/v3.0.5/ios_system.xcframework.zip -o .build/deps/ios_system.xcframework.zip
+shasum -a 256 -c - <<'CHECKSUMS'
+51d46b912eb30399cbb5c36c8c8f15eb1a44adcfc9ee581304ac9d3739a84716  .build/deps/ios_error.h
+d429e68102926f58bedd8e8b7105dcd169478cd6da1cef494a5f468482d1c8f5  .build/deps/ios_system.xcframework.zip
+CHECKSUMS
+unzip -oq .build/deps/ios_system.xcframework.zip -d .build/deps
+git submodule update --init --depth 1
 
-IOS_SYSTEM_VER="v2.7.0"
+for platform in iphoneos iphonesimulator; do
+	if [ "$platform" = iphoneos ]; then
+		arch=arm64
+		triple=arm64-apple-ios14.0
+		slice=ios-arm64
+		plist=basic_Info.plist
+	else
+		arch="arm64;x86_64"
+		triple=
+		slice=ios-arm64_x86_64-simulator
+		plist=basic_Info_Simulator.plist
+	fi
+	frameworks="$PWD/.build/deps/ios_system.xcframework/$slice"
+	cmake -S . -B ".build/$platform" \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 -DENABLE_SYNC=OFF \
+		-DCMAKE_SYSTEM_NAME=iOS -DCMAKE_OSX_SYSROOT="$(xcrun --sdk "$platform" --show-sdk-path)" \
+		-DCMAKE_OSX_ARCHITECTURES="$arch" -DCMAKE_OSX_DEPLOYMENT_TARGET=14.0 \
+		-DCMAKE_BUILD_TYPE=Release -DCMAKE_MACOSX_BUNDLE=OFF \
+		-DCMAKE_CXX_FLAGS="${triple:+-target $triple} -I$PWD/.build/deps" \
+		-DCMAKE_EXE_LINKER_FLAGS="-dynamiclib -F$frameworks -framework ios_system"
+	cmake --build ".build/$platform" --target task_executable calc_executable lex_executable --parallel 3
 
-HHROOT="https://github.com/holzschu"
-
-echo "Downloading header file:"
-curl -OL $HHROOT/ios_system/releases/download/$IOS_SYSTEM_VER/ios_error.h 
-
-echo "Downloading ios_system Framework:"
-rm -rf ios_system.xcframework
-curl -OL $HHROOT/ios_system/releases/download/$IOS_SYSTEM_VER/ios_system.xcframework.zip
-unzip ios_system.xcframework.zip
-rm ios_system.xcframework.zip
-
-echo "Compiling for iOS:"
-cp iOS_flags/CMakeCache.txt .
-make clean
-make
-
-# Create iOS frameworks:
-mkdir -p Frameworks
-
-for binary in task calc lex 
-do
-	rm -rf Frameworks/$binary.framework
-	mkdir Frameworks/$binary.framework
-	cp src/$binary Frameworks/$binary.framework/$binary
-	cp basic_Info.plist Frameworks/$binary.framework/Info.plist
-	plutil -replace CFBundleExecutable -string $binary Frameworks/$binary.framework/Info.plist
-	plutil -replace CFBundleName -string $binary Frameworks/$binary.framework/Info.plist
-	plutil -replace CFBundleIdentifier -string Nicolas-Holzschuch.$binary  Frameworks/$binary.framework/Info.plist
-	install_name_tool -id @rpath/$binary.framework/$binary   Frameworks/$binary.framework/$binary
+	for binary in task calc lex; do
+		framework_dir=".build/Release-$platform/$binary.framework"
+		rm -rf "$framework_dir"
+		mkdir -p "$framework_dir"
+		cp ".build/$platform/src/$binary" "$framework_dir/$binary"
+		cp "$plist" "$framework_dir/Info.plist"
+		plutil -replace CFBundleExecutable -string "$binary" "$framework_dir/Info.plist"
+		plutil -replace CFBundleName -string "$binary" "$framework_dir/Info.plist"
+		plutil -replace CFBundleIdentifier -string "Nicolas-Holzschuch.$binary" "$framework_dir/Info.plist"
+		install_name_tool -id "@rpath/$binary.framework/$binary" "$framework_dir/$binary"
+	done
 done
 
-# compile for simulator:
-echo "Compiling for Simulator:"
-make clean
-cp Simulator_flags/CMakeCache.txt .
-make
-
-mkdir -p Frameworks_Simulator
-for binary in task calc lex 
-do
-	rm -rf Frameworks_Simulator/$binary.framework
-	mkdir Frameworks_Simulator/$binary.framework
-	cp src/$binary Frameworks_Simulator/$binary.framework/$binary
-	cp basic_Info_Simulator.plist Frameworks_Simulator/$binary.framework/Info.plist
-	plutil -replace CFBundleExecutable -string $binary Frameworks_Simulator/$binary.framework/Info.plist
-	plutil -replace CFBundleName -string $binary Frameworks_Simulator/$binary.framework/Info.plist
-	plutil -replace CFBundleIdentifier -string Nicolas-Holzschuch.$binary  Frameworks_Simulator/$binary.framework/Info.plist
-	install_name_tool -id @rpath/$binary.framework/$binary   Frameworks_Simulator/$binary.framework/$binary
-done
-
-# then, merge them into XCframeworks:
-echo "Merging into XCFrameworks:"
-for framework in task lex calc
-do
-   rm -rf $framework.xcframework
-   xcodebuild -create-xcframework -framework Frameworks/$framework.framework -framework Frameworks_Simulator/$framework.framework -output $framework.xcframework
-   # while we're at it, let's compute the checksum:
-   rm -f $framework.xcframework.zip
-   zip -rq $framework.xcframework.zip $framework.xcframework
-   swift package compute-checksum $framework.xcframework.zip
+for framework in task lex calc; do
+	rm -rf ".build/$framework.xcframework"
+	xcodebuild -create-xcframework -framework ".build/Release-iphoneos/$framework.framework" \
+		-framework ".build/Release-iphonesimulator/$framework.framework" -output ".build/$framework.xcframework"
+	rm -f ".build/$framework.xcframework.zip"
+	(cd .build && zip -rq "$framework.xcframework.zip" "$framework.xcframework")
+	swift package compute-checksum ".build/$framework.xcframework.zip"
 done
